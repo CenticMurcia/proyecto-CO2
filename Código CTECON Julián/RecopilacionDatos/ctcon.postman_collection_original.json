@@ -1,0 +1,424 @@
+{
+	"info": {
+		"_postman_id": "6cb9283e-84f8-4a47-9c2a-c130ee9141dd",
+		"name": "ctcon",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "airquality",
+			"item": [
+				{
+					"name": "Retrieve entities - airquality",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "AirQuality"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/ctcon"
+							}
+						],
+						"url": {
+							"raw": "https://fiware.hopu.eu/orion/v2/entities?limit=1000&attrs=*,dateModified&options=count,keyValues",
+							"protocol": "https",
+							"host": [
+								"fiware",
+								"hopu",
+								"eu"
+							],
+							"path": [
+								"orion",
+								"v2",
+								"entities"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1000"
+								},
+								{
+									"key": "attrs",
+									"value": "*,dateModified"
+								},
+								{
+									"key": "options",
+									"value": "count,keyValues"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add name and address - airquality",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "AirQuality",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/ctcon",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"actionType\": \"append\",\n    \"entities\": [\n        {\n            \"id\": \"urn:ngsi:AirQualityObserved:HOPac67b2cd450a\",\n            \"type\": \"AirQualityObserved\",\n            \"location\": {\n                \"type\": \"geo:json\",\n                \"value\": {\n                    \"type\": \"Point\",\n                    \"coordinates\": [\n                        -1.2238365,\n                        38.0896306\n                    ]\n                },\n                \"metadata\": {}\n            },\n            \"name\": {\n                \"type\": \"Text\",\n                \"value\": \"Urdecom AQ2\"\n            }\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "https://fiware.hopu.eu/orion/v2/op/update",
+							"protocol": "https",
+							"host": [
+								"fiware",
+								"hopu",
+								"eu"
+							],
+							"path": [
+								"orion",
+								"v2",
+								"op",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "device",
+			"item": [
+				{
+					"name": "Retrieve entities - device",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "Device"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/ctcon"
+							}
+						],
+						"url": {
+							"raw": "https://fiware.hopu.eu/orion/v2/entities?limit=1000&attrs=*,dateModified&options=count,keyValues",
+							"protocol": "https",
+							"host": [
+								"fiware",
+								"hopu",
+								"eu"
+							],
+							"path": [
+								"orion",
+								"v2",
+								"entities"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1000"
+								},
+								{
+									"key": "attrs",
+									"value": "*,dateModified"
+								},
+								{
+									"key": "options",
+									"value": "count,keyValues"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add name and address - device",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "Device",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/ctcon",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"actionType\": \"append\",\n    \"entities\": [\n        {\n            \"id\": \"urn:ngsi:Device:HOPac67b2cd450a\",\n            \"type\": \"Device\",\n            \"location\": {\n                \"type\": \"geo:json\",\n                \"value\": {\n                    \"type\": \"Point\",\n                    \"coordinates\": [\n                        -1.2238365,\n                        38.0896306\n                    ]\n                },\n                \"metadata\": {}\n            },\n            \"name\": {\n                \"type\": \"Text\",\n                \"value\": \"Urdecom AQ2\"\n            }\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "https://fiware.hopu.eu/orion/v2/op/update",
+							"protocol": "https",
+							"host": [
+								"fiware",
+								"hopu",
+								"eu"
+							],
+							"path": [
+								"orion",
+								"v2",
+								"op",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "peoplecounting",
+			"item": [
+				{
+					"name": "Retrieve entities - noise",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "PeopleCounting"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/ctcon"
+							}
+						],
+						"url": {
+							"raw": "https://fiware.hopu.eu/orion/v2/entities?limit=1000&attrs=*,dateModified&options=count,keyValues",
+							"protocol": "https",
+							"host": [
+								"fiware",
+								"hopu",
+								"eu"
+							],
+							"path": [
+								"orion",
+								"v2",
+								"entities"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1000"
+								},
+								{
+									"key": "attrs",
+									"value": "*,dateModified"
+								},
+								{
+									"key": "options",
+									"value": "count,keyValues"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add name and address - device Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "PeopleCounting",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/ctcon",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"actionType\": \"append\",\n    \"entities\": [\n        {\n            \"id\": \"TBEEb827eb7f2d37:Access\",\n            \"type\": \"Access\",\n            \"location\": {\n                \"type\": \"geo:json\",\n                \"value\": {\n                    \"type\": \"Point\",\n                    \"coordinates\": [\n                        -1.2240365,\n                        38.0894306\n                    ]\n                },\n                \"metadata\": {}\n            },\n            \"name\": {\n                \"type\": \"Text\",\n                \"value\": \"Terabee People Counting\"\n            }\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "https://fiware.hopu.eu/orion/v2/op/update",
+							"protocol": "https",
+							"host": [
+								"fiware",
+								"hopu",
+								"eu"
+							],
+							"path": [
+								"orion",
+								"v2",
+								"op",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create user access token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"user-access-token\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "julgonzalez",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "vZnAWE7FexwgEqwT",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "fiware-login",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "secret",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://fiware.hopu.eu/keycloak/auth/realms/fiware-server/protocol/openid-connect/token",
+					"protocol": "https",
+					"host": [
+						"fiware",
+						"hopu",
+						"eu"
+					],
+					"path": [
+						"keycloak",
+						"auth",
+						"realms",
+						"fiware-server",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

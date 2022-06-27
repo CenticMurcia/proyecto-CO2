@@ -1,0 +1,444 @@
+{
+	"info": {
+		"_postman_id": "97bf81c7-67ab-4af1-9de0-1c5948364acc",
+		"name": "fiware-client-collection",
+		"description": "# FIWARE  Client Collection\n\nEsta colección contiene los ejemplos de llamadas a los diferentes servicios de la plataforma, entre ellos:\n\n- API Tiempo real - Orion Context Broker\n- API Histórico - QuantumLeap\n- Proveedor de Identidad - Keycloak\n\nLas llamadas de ejemplo tienen automatizada la obtención del token que puede ser obtenido manualmente, y debe ser obtenido para incluir el token en todas las llamadas de los servicios como cabecera de autenticación. \n\nLa colección es autocontenida y se organiza a través de variables de colección que pueden ser configuradas mediante la pestaña Variables.\n\nLa colección le es entregada ya configurada. Además las variables username y password pueden ser modificadas en caso de que cuente con distintos usuarios.\n\n\n## A tener en cuenta\n\n1. Es recomendable crear un entorno nuevo, ya que las llamadas generan variables por defecto, entre ellas:\n    - username\n    - password\n    - user-access-token\n    - fiware-service\n    - fiware-servicepath\n    - fiware-type\n2. Recomendable utilizar la versión 8.12.5 de Postman.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Tiempo real - Orion Context Broker",
+			"item": [
+				{
+					"name": "device",
+					"item": [
+						{
+							"name": "Get entidades",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user-access-token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "{{fiware-service}}"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "{{fiware-servicepath}}"
+									}
+								],
+								"url": {
+									"raw": "https://fiware.hopu.eu/orion/v2/entities?limit=1000&attrs=*,dateModified&options=count,keyValues&type={{fiware-type}}",
+									"protocol": "https",
+									"host": [
+										"fiware",
+										"hopu",
+										"eu"
+									],
+									"path": [
+										"orion",
+										"v2",
+										"entities"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "1000"
+										},
+										{
+											"key": "attrs",
+											"value": "*,dateModified"
+										},
+										{
+											"key": "options",
+											"value": "count,keyValues"
+										},
+										{
+											"key": "type",
+											"value": "{{fiware-type}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.collectionVariables.set(\"fiware-service\", \"Device\");",
+									"pm.collectionVariables.set(\"fiware-type\", \"Device\");"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "airquality",
+					"item": [
+						{
+							"name": "Get entidades",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user-access-token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "{{fiware-service}}"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "{{fiware-servicepath}}"
+									}
+								],
+								"url": {
+									"raw": "https://fiware.hopu.eu/orion/v2/entities?limit=1000&attrs=*,dateModified&options=count,keyValues&type={{fiware-type}}",
+									"protocol": "https",
+									"host": [
+										"fiware",
+										"hopu",
+										"eu"
+									],
+									"path": [
+										"orion",
+										"v2",
+										"entities"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "1000"
+										},
+										{
+											"key": "attrs",
+											"value": "*,dateModified"
+										},
+										{
+											"key": "options",
+											"value": "count,keyValues"
+										},
+										{
+											"key": "type",
+											"value": "{{fiware-type}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.collectionVariables.set(\"fiware-service\", \"AirQuality\");",
+									"pm.collectionVariables.set(\"fiware-type\", \"AirQualityObserved\");"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "peoplecounting",
+					"item": [
+						{
+							"name": "Get entidades",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user-access-token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "{{fiware-service}}"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "{{fiware-servicepath}}"
+									}
+								],
+								"url": {
+									"raw": "https://fiware.hopu.eu/orion/v2/entities?limit=1000&attrs=*,dateModified&options=count,keyValues&type={{fiware-type}}",
+									"protocol": "https",
+									"host": [
+										"fiware",
+										"hopu",
+										"eu"
+									],
+									"path": [
+										"orion",
+										"v2",
+										"entities"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "1000"
+										},
+										{
+											"key": "attrs",
+											"value": "*,dateModified"
+										},
+										{
+											"key": "options",
+											"value": "count,keyValues"
+										},
+										{
+											"key": "type",
+											"value": "{{fiware-type}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.collectionVariables.set(\"fiware-service\", \"PeopleCounting\");",
+									"pm.collectionVariables.set(\"fiware-type\", \"Access\");"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var idm_url = pm.collectionVariables.get(\"idm-url\");",
+							"pm.sendRequest({",
+							"    url: idm_url + '/auth/realms/fiware-server/protocol/openid-connect/token',",
+							"    method: 'POST',",
+							"    headers: {",
+							"        'Content-Type': 'application/x-www-form-urlencoded'",
+							"    },",
+							"    body: {",
+							"        mode: 'urlencoded',",
+							"        urlencoded: [",
+							"            { key: \"username\", value: pm.collectionVariables.get(\"username\"), disabled: false },",
+							"            {key: \"password\", value: pm.collectionVariables.get(\"password\"), disabled: false},",
+							"            {key: \"grant_type\", value: \"password\", disabled: false},",
+							"            {key: \"client_id\", value: 'fiware-login', disabled: false}",
+							"        ]",
+							"    }",
+							"}, function (err, response) {",
+							"    var jsonData = response.json();",
+							"    pm.collectionVariables.set(\"user-access-token\", jsonData.access_token);",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Proveedor de Identidad - Keycloak",
+			"item": [
+				{
+					"name": "Crear token de acceso del usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"user-access-token\", jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "fiware-login",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "secret",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{idm-url}}/auth/realms/fiware-server/protocol/openid-connect/token",
+							"host": [
+								"{{idm-url}}"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"fiware-server",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "idm-url",
+			"value": "https://fiware.hopu.eu/keycloak"
+		},
+		{
+			"key": "orion-url",
+			"value": "https://fiware.hopu.eu/orion"
+		},
+		{
+			"key": "quantumleap-url",
+			"value": "https://fiware.hopu.eu/quantumleap"
+		},
+		{
+			"key": "fiware-servicepath",
+			"value": "/ctcon"
+		},
+		{
+			"key": "username",
+			"value": "mminano"
+		},
+		{
+			"key": "password",
+			"value": "cKjV9XdEqjHR7f22pfR6bfR77TWZYKZk"
+		},
+		{
+			"key": "user-access-token",
+			"value": ""
+		},
+		{
+			"key": "fiware-service",
+			"value": ""
+		},
+		{
+			"key": "fiware-type",
+			"value": ""
+		}
+	]
+}

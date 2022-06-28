@@ -56,28 +56,40 @@ Para partículas (PM 2,5): Predicción a 20 minutos
 
 
     <!-- Graphs -->
+    <!-- https://codepen.io/shubich/pen/OZXjWL -->
+    <!-- https://stackoverflow.com/a/69769314 -->
     <!-- view-source:https://getbootstrap.com/docs/4.0/examples/dashboard/ -->
     <!-- https://stackoverflow.com/questions/39399264/in-chartjs-is-it-possible-to-change-the-line-style-between-different-points -->
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.min.js"></script>
-    <script>
-      var ctx = document.getElementById("CO2Chart");
+    <!--<script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.js"></script>
+    <script>      
+      var ctx = document.getElementById("CO2Chart").getContext('2d');
       var CO2Chart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ["Actual", "5 mins", "10 mins", "15 mins", "20 mins", "25 mins", "30 mins"],
+          labels: ["-10 mins", "-5 mins", "Actual", "+5 mins", "+10 mins", "+15 mins", "+20 mins"],
           datasets: [{
-            data: [153, 213, 184, 240, 220, 180, 120],
-            lineTension: 0,
-            backgroundColor: 'transparent',
+            label: "C02 pasado",
+            data: [153, 213, 230],
+            cubicInterpolationMode: 'monotone',
             borderColor: '#007bff',
             borderWidth: 4,
-            pointBackgroundColor: '#007bff'
+            pointBackgroundColor: '#007bff',
+          },
+          {
+            label: "C02 predicción",
+            data: [null, null, 230, 240, 220, 180, 120],
+            cubicInterpolationMode: 'monotone',
+            borderColor: '#007bff',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff',
+            borderDash: [8, 8],
           }]
         },
         options: {
-          scales: { yAxes: [{ ticks: { beginAtZero: false } }] },
-          legend: { display: false }
+          //scales: { yAxes: [{ ticks: { beginAtZero: false } }] },
+          //legend: { display: false }
         }
       });
 

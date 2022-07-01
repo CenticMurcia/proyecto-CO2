@@ -239,10 +239,53 @@ function print_data {
 }
 
 
+function step_save {
+     C02_lag2=C02_lag1
+     PM10_lag2=PM10_lag1
+     PM25_lag2=PM25_lag1
+
+     C02_lag1=C02
+     PM10_lag1=PM10
+     PM25_lag1=PM25
+}
+
+
+
+# Cada nueva fila se escribe a los 5 minutos
+# Por tanto...
+#    288 filas -> 1 dia
+#    288 * 365 * 5 = 525600 filas -> 5 años
+function save_historic_sensor_data {
+     {
+          echo "Fecha Tiempo PersonasIn PersonasOut Personas Temperatura Humedad C02 PM10 PM25" # Print the header 
+          tail +2 data | tail -525599 # Remove first line (header) | and the keep the last 525600 rows of data
+          echo "$(date +"%D %T") $Incoming $Outgoing $Personas $temperature $humidity $CO2 $PM10 $PM25" # Add the new last row
+     } | column -t | sponge data
+}
+
+
+while read -r $Incoming $Outgoing $Personas $temperature $humidity $CO2 $PM10 $PM25
+do
+    echo "$a" "$b"
+done < data | tail -3
+
+function write_json {
+
+     # var CO2_real  = [153, 213, 230];
+     # var PM10_real = [10, 20, 26];
+     # var PM25_real = [8, 18, 23];
+     echo "var CO2_real  = $(tail -3 data | awk '{print $8}'  | jq -s -c '.');" >> data.js
+     echo "var PM10_real = $(tail -3 data | awk '{print $9}'  | jq -s -c '.');" >> data.js
+     echo "var PM25_real = $(tail -3 data | awk '{print $10}' | jq -s -c '.');" >> data.js
+
+     echo "var CO2_pred  = [240, 220, 180, 120];" >> data.js
+     echo "var PM10_pred = [27,   22,  13,  11];" >> data.js
+     echo "var PM25_pred = [24,   18,  10,   8];" >> data.js
+}
+
+
 
 ################################################# MAIN
-
-
 
 API_get_token
 API_get_device_status
@@ -254,12 +297,30 @@ else
     server_log "[INFO]  El dispositivo se encuentra operativo."
 fi
 
-while true; do
+rm -f data # Remove data file
+touch data # Create empty data file
+
+
+while true
+do
      API_get_calidad_aire
      API_get_presencia
-     echo "$(date +"%D %T")    $Personas $temperature $humidity $CO2 $PM10 $PM25"
+     save_historic_sensor_data
+
+     rm -f data.js
+
+     lines_of_data=$(wc -l < data)
+     if (( $lines_of_data > 3)); then
+          echo "Haciendo predicciones..."
+          #compute_ml_predictions
+          write_json
+     else
+          echo "No hay suficientes datos para hacer predicciones"
+     fi
+     
      #print_data
      sleep 5
 done
+
 
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend Test</title>
+</head>
+<body>
+  <h1>Frontend Test</h1>
+  <div id="myData"></div>
+  <script>
+    fetch("data.json")
+      .then(res  => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.log('error: ' + err));
+
+      // or whatever you wanna do with the data
+      //document.getElementById("myData").innerHTML = data;
+  </script>
+</body>
+</html>

@@ -2,7 +2,7 @@ name: Updater
 
 on:
   schedule:
-    - cron: '* * * * *'
+    - cron: '*/5 7-20 * * 1-5' # Every 5 minutes from 7:00 to 20:00, from Mon to Fri.
   
 jobs:
   update:

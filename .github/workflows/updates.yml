@@ -1,0 +1,24 @@
+name: Updater
+
+on:
+  schedule:
+    - cron: '* * * * *'
+  
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Give permision to backend script
+      run: chmod +x backend
+
+    - name: Run backend script
+      run: ./backend
+
+    - name: Commit changed file
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: 'data.tsv'
+        message: 'Update data.tsv'

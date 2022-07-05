@@ -268,7 +268,7 @@ function save_historic_sensor_data {
           echo "Fecha Tiempo PersonasIn PersonasOut Personas Temperatura Humedad C02 PM10 PM25" # Print the header 
           tail +2 data.tsv | tail -525599 # Remove first line (header) | and the keep the last 525600 rows of data
           echo "$(date +"%D %T") $Incoming $Outgoing $Personas $temperature $humidity $CO2 $PM10 $PM25" # Add the new last row
-     } | column -t | sponge data.tsv
+     } | column -t > tmp && mv tmp data.tsv # sponge data.tsv
 }
 
 

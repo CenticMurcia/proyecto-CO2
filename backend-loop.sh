@@ -314,13 +314,15 @@ function save_historic_sensor_data {
 
 ########################################## MAIN
 
-server_log "==== INICIO DEL SCRIPT ====="
-API_get_token
-API_get_device_status
-API_get_calidad_aire
-API_get_presencia
-save_historic_sensor_data
-server_log "====== FIN DEL SCRIPT ======"
+while true
+do
+     API_get_token
+     API_get_device_status
+     API_get_calidad_aire
+     API_get_presencia
+     save_historic_sensor_data
+     sleep 300 # 60secs * 5 = 300secs = 5 minutes
+done
 
 
 

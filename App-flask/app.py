@@ -171,13 +171,10 @@ def pipeline():
 def web_endpoint():
     data={
         "x_labels":   ["-15 mins", "-10 mins", "-5 mins", "Actual", "+5 mins", "+10 mins", "+15 mins", "+20 mins"],
-        
         "CO2":        [120, 153, 213, 230, 240, 220, 180, 120],
         "CO2_msg":    get_CO2_msg(200),
-        
         "PM10":       [8, 10, 20, 26, 27, 22, 13, 11],
         "PM10_msg":   get_PM10_msg(10),
-        
         "PM25":       [6, 8, 18, 23, 24, 18, 10, 8],
         "PM25_msg":   get_PM25_msg(10)
     }

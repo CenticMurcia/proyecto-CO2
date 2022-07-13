@@ -6,7 +6,7 @@ from flask import Flask, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from datetime import datetime
-
+import os
 
 app = Flask(__name__)
 
@@ -189,5 +189,8 @@ if __name__ == '__main__':
     #scheduler.add_job(pipeline, 'cron', day_of_week='mon-fri', hour='7-20', minute='*/5')
     #scheduler.start()
 
-    app.run(host="0.0.0.0", debug=True, use_reloader=False)
+    port = os.getenv('PORT') # Port is given by Heroku as env variable
+    print("Port:", port)
+
+    app.run(host="0.0.0.0", port=port, debug=True, use_reloader=False)
 

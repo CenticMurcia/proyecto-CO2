@@ -1,3 +1,6 @@
 flask
 apscheduler
 requests
+numpy
+pandas
+scikit-learn

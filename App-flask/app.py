@@ -189,5 +189,5 @@ if __name__ == '__main__':
     #scheduler.add_job(pipeline, 'cron', day_of_week='mon-fri', hour='7-20', minute='*/5')
     #scheduler.start()
 
-    app.run(debug=True, use_reloader=False)
+    app.run(host="0.0.0.0", debug=True, use_reloader=False)
 

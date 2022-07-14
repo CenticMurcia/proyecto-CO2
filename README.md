@@ -33,7 +33,7 @@ This pipeline is run every 5 mins
 (or also can be done be setting a crontab job every 5 minutes)
 ```
 
-![](img/backend.png)
+![](static/backend.png)
 
 
 ### FRONTEND SCRIPT
@@ -52,4 +52,4 @@ every 60 seconds because it has in the <head> section:
   <meta http-equiv="refresh" content="60">
 ```
 
-![](img/frontend.png)
+![](static/frontend.png)

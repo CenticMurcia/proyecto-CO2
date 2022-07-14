@@ -1,5 +1,6 @@
 # Run the application (as long as is named app.py) with:
 # $ flask run 
+# $ python app.py 
 
 import requests
 from flask import Flask, render_template
@@ -8,6 +9,7 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from datetime import datetime
 import os
 import numpy as np
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -79,7 +81,7 @@ def API_get_presencia(access_token):
 
 ####################################
 
-def init_data():
+def init_empty_data():
     f = open("data.csv", "w")
     f.write("Fecha,Hora,PersonasIn,PersonasOut,Personas,Temperatura,Humedad,CO2,PM10,PM25\n")
     f.close()
@@ -198,17 +200,20 @@ def get_ml_predictions():
 
 ####################################
 
-def pipeline():
+def fill_data_from_HOPU_and_do_ML():
 
     get_datetime()
     print("pipeline at " + dt)
 
+    ####### fill data from HOPU and save it into data.csv as a new row
     API_get_token()
     API_get_device_status(access_token)
     API_get_calidad_aire(access_token)    
     API_get_presencia(access_token)
     print_data()
     save_data()
+
+    ####### Get last 4 rows from data.csv and do ML predictions
     get_ml_predictions()
 
 
@@ -229,13 +234,15 @@ def web_endpoint():
 
 if __name__ == '__main__':
 
-    init_data()
+    init_empty_data()
     
-    #scheduler = BackgroundScheduler(timezone='Europe/Madrid') # Default timezone is "utc"
-    #scheduler.add_job(pipeline, 'cron', day_of_week='mon-fri', hour='7-20', minute='*/5')
-    #scheduler.start()
+    scheduler = BackgroundScheduler(timezone='Europe/Madrid') # Default timezone is "utc"
+    #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'interval', seconds=8)
+    scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*')
+    #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*/5')
+    scheduler.start()
 
-    port = os.getenv('PORT') # Port is given by Heroku as env variable
+    port = os.getenv('PORT') # Port is given by Heroku as environmental variable
     print("Port:", port)
 
     app.run(host="0.0.0.0", port=port, debug=True, use_reloader=False)

@@ -220,6 +220,7 @@ def fill_data_from_HOPU_and_do_ML():
 
 @app.route('/')
 def web_endpoint():
+    global CO2_list, PM10_list, PM25_list
     data={
         "x_labels":   ["-15 mins", "-10 mins", "-5 mins", "Actual", "+5 mins", "+10 mins", "+15 mins", "+20 mins"],
         "CO2":        CO2_list, #[120, 153, 213, 230, 240, 220, 180, 120],

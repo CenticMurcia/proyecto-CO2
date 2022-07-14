@@ -13,14 +13,22 @@ import pandas as pd
 
 app = Flask(__name__)
 
+hora_list = ["Iniciando..."]
+CO2_list  = [-1]
+PM10_list = [-1]
+PM25_list = [-1]
+
 
 #################################### READ HOPU DATA
 
 def get_datetime():
     # datetime object containing current date and time
     # dd/mm/YY H:M:S
-    global dt
-    dt = datetime.now().strftime("%d/%m/%Y,%H:%M:%S")
+    global date,time,hora
+    dt = datetime.now()
+    date = dt.strftime("%d/%m/%Y")
+    time = dt.strftime("%H:%M:%S")
+    hora = dt.strftime("%H:%M")
 
 
 # 1. Iniciar sesion en el APIRest de Hopu
@@ -88,7 +96,7 @@ def init_empty_data():
 
 def save_data():
     f = open('data.csv', 'a')
-    f.write(dt+","+
+    f.write(date+","+hora+","+
             str(PersonasIn)+","+
             str(PersonasOut)+","+
             str(Personas)+","+
@@ -154,24 +162,22 @@ def get_PM25_msg(pred_PM25_20mins):
 
 def get_ml_predictions():
 
-    global CO2_list, PM10_list, PM25_list
+    global hora_list, CO2_list, PM10_list, PM25_list
 
-    input_data_df = pd.read_csv("data.csv")
+    # get tail(4) that means lag15, lag10, lag5, actual 
+    in_dat = pd.read_csv("data.csv").tail(4)
 
-    if len(input_data_df) >= 4:
+    hora_hist = in_dat["Hora"].values
+    temp_hist = in_dat["Temperatura"].values # np array [temp_lag15, temp_lag10, temp_lag5, temp_actual] 
+    hume_hist = in_dat["Humedad"].values
+    pm25_hist = in_dat["PM25"].values
+    pm10_hist = in_dat["PM10"].values
+    CO2_hist  = in_dat["CO2"].values
+    pers_hist = in_dat["Personas"].values
 
-        #### ENOUGH DATA -> DO PREDICTION
-        print("doing ml prediction")
+    if len(in_dat) == 4:
 
-        # get tail(4) that means lag15, lag10, lag5, actual 
-        in_dat = input_data_df.tail(4)
-
-        temp_hist = in_dat["Temperatura"].values # [temp_lag15, temp_lag10, temp_lag5, temp_actual] 
-        hume_hist = in_dat["Humedad"].values
-        pm25_hist = in_dat["PM25"].values
-        pm10_hist = in_dat["PM10"].values
-        CO2_hist  = in_dat["CO2"].values
-        pers_hist = in_dat["Personas"].values
+        #### ENOUGH DATA -> DO ML PREDICTION
 
         # Prepare flat numpy matrix for the sklearn prediction
         test_x = np.concatenate((temp_hist,
@@ -185,16 +191,21 @@ def get_ml_predictions():
         pred_np = np.array([[  1.5137,   1.8456,   1.887 ,   2.5185,   2.5037,   2.8493,
                                2.9192,   3.412 , 760.1504, 766.1264, 779.5188, 755.173 ]])[0]
 
+        hora_list = list(hora_hist) + ["+5 mins", "+10 mins", "+15 mins", "+20 mins"]
         PM25_list = list(pm25_hist) + list(pred_np[0:4])
         PM10_list = list(pm10_hist) + list(pred_np[4:8])
         CO2_list  = list(CO2_hist)  + list(pred_np[8:12])
 
+        print("ML prediction done")
+
+
     else:
         #### NO ENOUGH DATA -> ERROR MSG
-        print("NO ENOUGH DATA")
-        PM25_list = [-1]*8
-        PM10_list = [-1]*8
-        CO2_list  = [-1]*8
+        print("NO ENOUGH DATA FOR DOING ML PREDICTIONS")
+        hora_list = list(hora_hist)
+        PM25_list = list(pm25_hist)
+        PM10_list = list(pm10_hist)
+        CO2_list  = list(CO2_hist)
 
 
 
@@ -202,8 +213,10 @@ def get_ml_predictions():
 
 def fill_data_from_HOPU_and_do_ML():
 
+    global date, time
+
     get_datetime()
-    print("pipeline at " + dt)
+    print("pipeline at " + date + " " + time)
 
     ####### fill data from HOPU and save it into data.csv as a new row
     API_get_token()
@@ -220,9 +233,9 @@ def fill_data_from_HOPU_and_do_ML():
 
 @app.route('/')
 def web_endpoint():
-    global CO2_list, PM10_list, PM25_list
+    global hora_list, CO2_list, PM10_list, PM25_list
     data={
-        "x_labels":   ["-15 mins", "-10 mins", "-5 mins", "Actual", "+5 mins", "+10 mins", "+15 mins", "+20 mins"],
+        "x_labels":   hora_list,
         "CO2":        CO2_list, #[120, 153, 213, 230, 240, 220, 180, 120],
         "CO2_msg":    get_CO2_msg(CO2_list[-1]),
         "PM10":       PM10_list, #[8, 10, 20, 26, 27, 22, 13, 11],

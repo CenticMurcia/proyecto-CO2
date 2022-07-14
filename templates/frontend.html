@@ -5,9 +5,10 @@
 
     <!-- Automatic refresh every seconds specified in content -->
     <meta http-equiv="refresh" content="60">
-
-    <!-- Bootstrap 5 (CSS only) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <style>
+      h1   {font-family: arial;}
+      h5   {font-family: arial;}
+    </style>
   </head>
 
    
@@ -17,11 +18,11 @@
 
     <h1>Calidad del aire</h1>
 
-    <h5><span style="color: #007bff">CO2: </span>{{ CO2_msg }}</h5>
+    <h5>{{ CO2_msg }}</h5>
     <canvas class="my-4" id="CO2Chart" width="900" height="170"></canvas>
 
-    <h5> <span style="color: #ff0000">PM 10: </span>{{ PM10_msg }}</h5>
-    <h5><span style="color: #4caf50">PM 2,5: </span>{{ PM25_msg }}</h5>
+    <h5>{{ PM10_msg }}</h5>
+    <h5>{{ PM25_msg }}</h5>
     <canvas class="my-4" id="PartChart" width="900" height="170"></canvas>
 
 
@@ -69,16 +70,16 @@
         data: {
           labels: {{ x_labels|safe }},
           datasets: [{
-            label: "Part 10",
+            label: "Partículas < 10 micras",
             data: {{ PM10 }},
             cubicInterpolationMode: 'monotone',
-            borderColor: '#ff0000',
+            borderColor: '#cddc39',
             borderWidth: 4,
-            pointBackgroundColor: '#ff0000',
+            pointBackgroundColor: '#cddc39',
             segment: { borderDash: ctx => ctx.p0DataIndex<3 ? [] : [8,8]}
           },
           {
-            label: "Part 2,5",
+            label: "Partículas < 2,5 micras",
             data: {{ PM25 }},
             cubicInterpolationMode: 'monotone',
             borderColor: '#4caf50',

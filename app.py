@@ -17,6 +17,9 @@ hora_list = ["Iniciando..."]
 CO2_list  = [-1]
 PM10_list = [-1]
 PM25_list = [-1]
+CO2_msg  = ""
+PM10_msg = ""
+PM25_msg = ""
 
 
 #################################### READ HOPU DATA
@@ -162,7 +165,7 @@ def get_PM25_msg(pred_PM25_20mins):
 
 def get_ml_predictions():
 
-    global hora_list, CO2_list, PM10_list, PM25_list
+    global hora_list, CO2_list, PM10_list, PM25_list, CO2_msg, PM10_msg, PM25_msg
 
     # get tail(4) that means lag15, lag10, lag5, actual 
     in_dat = pd.read_csv("data.csv").tail(4)
@@ -195,6 +198,9 @@ def get_ml_predictions():
         PM25_list = list(pm25_hist) + list(pred_np[0:4])
         PM10_list = list(pm10_hist) + list(pred_np[4:8])
         CO2_list  = list(CO2_hist)  + list(pred_np[8:12])
+        PM25_msg  = get_CO2_msg(CO2_list[-1])
+        PM10_msg  = get_PM10_msg(PM10_list[-1])
+        CO2_msg   = get_PM25_msg(PM25_list[-1])
 
         print("ML prediction done")
 
@@ -206,7 +212,9 @@ def get_ml_predictions():
         PM25_list = list(pm25_hist)
         PM10_list = list(pm10_hist)
         CO2_list  = list(CO2_hist)
-
+        PM25_msg  = "No ha transcurrido el suficienciente tiempo (<15 mins) para predecir las partículas inferiores a 2,5 micra."
+        PM10_msg  = "No ha transcurrido el suficienciente tiempo (<15 mins) para predecir las partículas inferiores a 10 micras."
+        CO2_msg   = "No ha transcurrido el suficienciente tiempo (<15 mins) para predecir el CO2."
 
 
 ####################################
@@ -233,15 +241,15 @@ def fill_data_from_HOPU_and_do_ML():
 
 @app.route('/')
 def web_endpoint():
-    global hora_list, CO2_list, PM10_list, PM25_list
+    global hora_list, CO2_list, PM10_list, PM25_list, CO2_msg, PM10_msg, PM25_msg
     data={
         "x_labels":   hora_list,
         "CO2":        CO2_list, #[120, 153, 213, 230, 240, 220, 180, 120],
-        "CO2_msg":    get_CO2_msg(CO2_list[-1]),
+        "CO2_msg":    CO2_msg,
         "PM10":       PM10_list, #[8, 10, 20, 26, 27, 22, 13, 11],
-        "PM10_msg":   get_PM10_msg(PM10_list[-1]),
+        "PM10_msg":   PM10_msg,
         "PM25":       PM25_list, #[6, 8, 18, 23, 24, 18, 10, 8],
-        "PM25_msg":   get_PM25_msg(PM25_list[-1])
+        "PM25_msg":   PM25_msg
     }
     return render_template('frontend.html', **data)
 
@@ -251,9 +259,9 @@ if __name__ == '__main__':
     init_empty_data()
     
     scheduler = BackgroundScheduler(timezone='Europe/Madrid') # Default timezone is "utc"
-    #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'interval', seconds=8)
-    scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*')
-    #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*/5')
+    #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'interval', seconds=5)
+    #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*')
+    scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*/5')
     scheduler.start()
 
     port = os.getenv('PORT') # Port is given by Heroku as environmental variable

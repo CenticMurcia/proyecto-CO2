@@ -11,6 +11,14 @@ import os
 import numpy as np
 import pandas as pd
 
+######################## ML MODEL
+from joblib import load
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import Ridge
+
+
+
 app = Flask(__name__)
 
 hora_list = ["Iniciando..."]
@@ -92,6 +100,12 @@ def API_get_presencia(access_token):
 
 ####################################
 
+def init_ml_model():
+    global ml_model
+    ml_model = make_pipeline(StandardScaler(), Ridge())
+    ml_model = load('models/ridge.joblib') 
+
+
 def init_empty_data():
     f = open("data.csv", "w")
     f.write("Fecha,Hora,PersonasIn,PersonasOut,Personas,Temperatura,Humedad,CO2,PM10,PM25\n")
@@ -166,6 +180,7 @@ def get_PM25_msg(pred_PM25_20mins):
 def get_ml_predictions():
 
     global hora_list, CO2_list, PM10_list, PM25_list, CO2_msg, PM10_msg, PM25_msg
+    global ml_model
 
     # get tail(4) that means lag15, lag10, lag5, actual 
     in_dat = pd.read_csv("data.csv").tail(4)
@@ -191,13 +206,17 @@ def get_ml_predictions():
                                  pers_hist)).reshape(1,-1)
 
         # DO sklearn prediction
-        pred_np = np.array([[  1.5137,   1.8456,   1.887 ,   2.5185,   2.5037,   2.8493,
-                               2.9192,   3.412 , 760.1504, 766.1264, 779.5188, 755.173 ]])[0]
+
+        #pred_np = np.array([[  1.5137,   1.8456,   1.887 ,   2.5185,   2.5037,   2.8493,
+        #                       2.9192,   3.412 , 760.1504, 766.1264, 779.5188, 755.173 ]])[0]
+
+        pred_np = ml_model.predict(test_x)
+        assert pred_np.shape==(1,12)
 
         hora_list = list(hora_hist) + ["+5 mins", "+10 mins", "+15 mins", "+20 mins"]
-        PM25_list = list(pm25_hist) + list(pred_np[0:4])
-        PM10_list = list(pm10_hist) + list(pred_np[4:8])
-        CO2_list  = list(CO2_hist)  + list(pred_np[8:12])
+        PM25_list = list(pm25_hist) + list(pred_np[0][0:4])
+        PM10_list = list(pm10_hist) + list(pred_np[0][4:8])
+        CO2_list  = list(CO2_hist)  + list(pred_np[0][8:12])
         PM25_msg  = get_CO2_msg(CO2_list[-1])
         PM10_msg  = get_PM10_msg(PM10_list[-1])
         CO2_msg   = get_PM25_msg(PM25_list[-1])
@@ -257,11 +276,12 @@ def web_endpoint():
 if __name__ == '__main__':
 
     init_empty_data()
+    init_ml_model()
     
     scheduler = BackgroundScheduler(timezone='Europe/Madrid') # Default timezone is "utc"
     #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'interval', seconds=5)
-    #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*')
-    scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*/5')
+    scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='*', hour='*', minute='*')
+    #scheduler.add_job(fill_data_from_HOPU_and_do_ML, 'cron', day_of_week='mon-fri', hour='7-20', minute='*/5')
     scheduler.start()
 
     port = os.getenv('PORT') # Port is given by Heroku as environmental variable

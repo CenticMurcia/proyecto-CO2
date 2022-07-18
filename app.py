@@ -217,9 +217,9 @@ def get_ml_predictions():
         PM25_list = list(pm25_hist) + list(pred_np[0][0:4])
         PM10_list = list(pm10_hist) + list(pred_np[0][4:8])
         CO2_list  = list(CO2_hist)  + list(pred_np[0][8:12])
-        PM25_msg  = get_CO2_msg(CO2_list[-1])
+        CO2_msg   = get_CO2_msg(CO2_list[-1])
         PM10_msg  = get_PM10_msg(PM10_list[-1])
-        CO2_msg   = get_PM25_msg(PM25_list[-1])
+        PM25_msg  = get_PM25_msg(PM25_list[-1])
 
         print("ML prediction done")
 

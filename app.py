@@ -7,6 +7,7 @@ from flask import Flask, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from datetime import datetime
+import pytz
 import os
 import numpy as np
 import pandas as pd
@@ -16,7 +17,6 @@ from joblib import load
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Ridge
-
 
 
 app = Flask(__name__)
@@ -36,7 +36,7 @@ def get_datetime():
     # datetime object containing current date and time
     # dd/mm/YY H:M:S
     global date,time,hora
-    dt = datetime.now()
+    dt = datetime.now(pytz.timezone("Europe/Madrid"))
     date = dt.strftime("%d/%m/%Y")
     time = dt.strftime("%H:%M:%S")
     hora = dt.strftime("%H:%M")

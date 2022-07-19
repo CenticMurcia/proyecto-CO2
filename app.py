@@ -275,7 +275,7 @@ def web_endpoint():
 
 @app.route('/data')
 def downloadData ():
-    return send_file("/data.csv", as_attachment=True)
+    return flask.send_file("/data.csv", as_attachment=True)
 
 if __name__ == '__main__':
 

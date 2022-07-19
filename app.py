@@ -273,6 +273,10 @@ def web_endpoint():
     return render_template('frontend.html', **data)
 
 
+@app.route('/data')
+def downloadData ():
+    return send_file("/data.csv", as_attachment=True)
+
 if __name__ == '__main__':
 
     init_empty_data()

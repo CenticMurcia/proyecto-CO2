@@ -3,7 +3,7 @@
 # $ python app.py 
 
 import requests
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from datetime import datetime
@@ -275,7 +275,7 @@ def web_endpoint():
 
 @app.route('/data')
 def downloadData ():
-    return flask.send_file("/data.csv", as_attachment=True)
+    return send_file("/data.csv", as_attachment=True)
 
 if __name__ == '__main__':
 

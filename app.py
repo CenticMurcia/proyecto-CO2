@@ -292,5 +292,6 @@ if __name__ == '__main__':
     port = os.getenv('PORT') # Port is given by Heroku as environmental variable
     print("Port:", port)
 
-    app.run(host="0.0.0.0", port=port, debug=True, use_reloader=False)
+    #app.run(host="0.0.0.0", port=port, debug=True, use_reloader=False)
+    app.run(host="0.0.0.0")
 
